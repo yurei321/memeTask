@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:background="#AFACDB">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="XX.XX.XX - XX.XX.XX"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:id="@+id/date_text"
+        android:layout_gravity="center"
+        android:textColor="#102343"
+        />
+    <TextView
+        android:textColor="#102343"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="мем этой недели - "
+        android:textSize="30sp"
+        android:layout_gravity="center"
+        android:id="@+id/today_meme_text"
+        />
+    <ImageView
+        android:layout_width="350dp"
+        android:layout_height="250dp"
+        android:src="@drawable/ic_launcher_background"
+        android:layout_gravity="center"
+        android:id="@+id/meme_img"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:gravity="center"
+        >
+        <TextView
+            android:textColor="#102343"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ваше состояние"
+            android:textSize="30sp"
+            android:layout_gravity="center"
+            android:id="@+id/today_task_text"
+
+            />
+
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:backgroundTint="#00FFFFFF"
+            android:text="+"
+            android:layout_marginLeft="60dp"
+            android:textSize="30sp" />
+
+        <!--        <Button-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Удалить"-->
+<!--            android:textSize="16dp"-->
+<!--            android:id="@+id/btn_delete"/>-->
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:background="#A7A1C5"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerview"
+        android:textSize="20sp"
+        android:textColor="#102343"/>
+
+</LinearLayout>
