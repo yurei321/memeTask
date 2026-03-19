@@ -1,6 +1,7 @@
 package com.example.memetask;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -19,12 +20,14 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.memetask.db.AppDatabase;
 import com.example.memetask.db.MemeNoteEntity;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class AddState extends AppCompatActivity {
-    Button btn_send_new;
+    Button btn_send_new, btn_goback_add;
 
 
     ImageButton img_happy, img_angry, img_sad, img_tired;
@@ -46,6 +49,7 @@ public class AddState extends AppCompatActivity {
             return insets;
         });
         btn_send_new = findViewById(R.id.btn_send_new);
+        btn_goback_add = findViewById(R.id.btn_goback_add);
         img_happy = findViewById(R.id.img_happy);
         img_angry = findViewById(R.id.img_angry);
         img_sad = findViewById(R.id.img_sad);
@@ -53,6 +57,19 @@ public class AddState extends AppCompatActivity {
         enter_date = findViewById(R.id.enter_date);
         enter_notes = findViewById(R.id.enter_notes);
         imageButtons = new ImageButton[]{img_happy, img_sad, img_angry, img_tired};
+        DateFormat deviceDateFormat = android.text.format.DateFormat.getDateFormat(this);
+        enter_date.setText(deviceDateFormat.format(new Date()));
+        for (ImageButton imageButton : imageButtons) {
+            imageButton.setOnClickListener(this::onMoodSelected);
+        }
+
+        btn_goback_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btn_send_new.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,9 +126,19 @@ public class AddState extends AppCompatActivity {
         selectedMoodButtonId = moodView.getId();
         for (ImageButton imageButton : imageButtons) {
             if (imageButton.getId() == selectedMoodButtonId) {
-                imageButton.setColorFilter(Color.argb(120, 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
-            } else {
                 imageButton.clearColorFilter();
+                imageButton.setAlpha(0.9f);
+                imageButton.setScaleX(1.18f);
+                imageButton.setScaleY(1.18f);
+                imageButton.setElevation(18f);
+                imageButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#b9d1a3")));
+            } else {
+                imageButton.setColorFilter(Color.argb(155, 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
+                imageButton.setAlpha(0.48f);
+                imageButton.setScaleX(1.0f);
+                imageButton.setScaleY(1.0f);
+                imageButton.setElevation(0f);
+                imageButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#A7A1C5")));
             }
         }
     }

@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="XX.XX.XX - XX.XX.XX"
-        android:textSize="35sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:id="@+id/date_text"
         android:layout_gravity="center"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="мем этой недели - "
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:layout_gravity="center"
         android:id="@+id/today_meme_text"
         />
@@ -47,20 +47,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ваше состояние"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:layout_gravity="center"
             android:id="@+id/today_task_text"
 
             />
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
+            android:scaleType="centerCrop"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:backgroundTint="#00FFFFFF"
-            android:text="+"
-            android:layout_marginLeft="60dp"
+            android:src="@drawable/img_add"
+            android:layout_marginTop="3dp"
             android:textSize="30sp" />
 
         <!--        <Button-->
@@ -70,7 +70,10 @@
 <!--            android:textSize="16dp"-->
 <!--            android:id="@+id/btn_delete"/>-->
     </LinearLayout>
-
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#000000"/>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:background="#A7A1C5"

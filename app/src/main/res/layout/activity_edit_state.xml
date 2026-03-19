@@ -29,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Дата:"
+            android:layout_marginLeft="10dp"
             android:textSize="25sp"
             android:textColor="#102343"/>
         <TextView
@@ -44,6 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Настроение:"
+        android:layout_marginLeft="10dp"
         android:textSize="25sp"
         android:textColor="#102343"/>
     <LinearLayout
@@ -98,11 +100,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Заметки:"
+            android:layout_marginLeft="10dp"
             android:textSize="25sp"
             android:textColor="#102343"/>
         <EditText
             android:id="@+id/enter_notes"
-            android:layout_width="220dp"
+            android:textColor="#102343"
+            android:layout_width="210dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:background="#fff"
@@ -116,6 +120,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
+        android:layout_marginLeft="70dp"
         android:layout_marginRight="10dp"
         android:text="Отмена"
         android:textSize="20sp"/>
@@ -124,7 +129,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:layout_marginRight="25dp"
+        android:layout_marginRight="10dp"
         android:text="Изменить"
         android:textSize="20sp"/>
     </LinearLayout>

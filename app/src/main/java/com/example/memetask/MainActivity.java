@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,13 +25,15 @@ import com.example.memetask.db.AppDatabase;
 import com.example.memetask.db.MemeNoteEntity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.text.DateFormat;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
 public class MainActivity extends AppCompatActivity {
-    Button btn_add;
+    ImageButton btn_add;
     ImageView meme_img;
     RecyclerView recyclerView;
     TextView date_text;
@@ -96,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        updateCurrentWeekRangeText();
 
 
 
@@ -104,7 +108,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        updateCurrentWeekRangeText();
         loadRecordsFromDb();
+    }
+
+    private void updateCurrentWeekRangeText() {
+        // Создаём календарь с текущими датой/временем устройства.
+        Calendar monday = Calendar.getInstance();
+        // Получаем день недели для текущей даты (Calendar.SUNDAY..Calendar.SATURDAY).
+        int dayOfWeek = monday.get(Calendar.DAY_OF_WEEK);
+        // Считаем, на сколько дней нужно отступить назад до понедельника (0 для понедельника).
+        int daysFromMonday = (dayOfWeek + 5) % 7;
+        // Сдвигаем текущую дату назад до понедельника текущей недели.
+        monday.add(Calendar.DAY_OF_MONTH, -daysFromMonday);
+
+        // Клонируем календарь понедельника, чтобы отдельно вычислить воскресенье.
+        Calendar sunday = (Calendar) monday.clone();
+        // Получаем воскресенье: это понедельник + 6 дней.
+        sunday.add(Calendar.DAY_OF_MONTH, 6);
+
+        // Берём системный формат даты устройства (локаль/настройки пользователя).
+        DateFormat deviceDateFormat = android.text.format.DateFormat.getDateFormat(this);
+        // Формируем строку диапазона недели: "понедельник - воскресенье".
+        String weekRange = deviceDateFormat.format(monday.getTime())
+                + " - "
+                + deviceDateFormat.format(sunday.getTime());
+        // Показываем рассчитанный диапазон в TextView на главном экране.
+        date_text.setText(weekRange);
     }
     private void deleteFromDatabase(MemeNoteEntity model){
     dbExecutor.execute(new Runnable() {

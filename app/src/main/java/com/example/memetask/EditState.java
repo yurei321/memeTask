@@ -1,6 +1,7 @@
 package com.example.memetask;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -65,8 +66,25 @@ public class EditState extends AppCompatActivity {
         date_const = findViewById(R.id.date_const);
         enter_notes = findViewById(R.id.enter_notes);
         imageButtons = new ImageButton[]{img_happy, img_sad, img_angry, img_tired};
+        for (ImageButton imageButton : imageButtons) {
+            imageButton.setOnClickListener(this::onMoodSelected);
+        }
 
         date_const.setText(memeNote.getDate());
+        enter_notes.setText(memeNote.getNotes());
+        if ("happy".equals(memeNote.getImageId())) {
+            selectedMoodButtonId = R.id.img_happy;
+            onMoodSelected(img_happy);
+        } else if ("sad".equals(memeNote.getImageId())) {
+            selectedMoodButtonId = R.id.img_sad;
+            onMoodSelected(img_sad);
+        } else if ("angry".equals(memeNote.getImageId())) {
+            selectedMoodButtonId = R.id.img_angry;
+            onMoodSelected(img_angry);
+        } else if ("tired".equals(memeNote.getImageId())) {
+            selectedMoodButtonId = R.id.img_tired;
+            onMoodSelected(img_tired);
+        }
         long id = memeNote.getId();
 
         btn_goback.setOnClickListener(new View.OnClickListener() {
@@ -137,9 +155,19 @@ public class EditState extends AppCompatActivity {
         selectedMoodButtonId = moodView.getId();
         for (ImageButton imageButton : imageButtons) {
             if (imageButton.getId() == selectedMoodButtonId) {
-                imageButton.setColorFilter(Color.argb(120, 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
-            } else {
                 imageButton.clearColorFilter();
+                imageButton.setAlpha(0.9f);
+                imageButton.setScaleX(1.18f);
+                imageButton.setScaleY(1.18f);
+                imageButton.setElevation(18f);
+                imageButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#b9d1a3")));
+            } else {
+                imageButton.setColorFilter(Color.argb(155, 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
+                imageButton.setAlpha(0.48f);
+                imageButton.setScaleX(1.0f);
+                imageButton.setScaleY(1.0f);
+                imageButton.setElevation(0f);
+                imageButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#A7A1C5")));
             }
         }
     }
