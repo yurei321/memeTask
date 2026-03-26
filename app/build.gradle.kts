@@ -55,6 +55,8 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.glide)
     implementation(libs.room.runtime)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
     annotationProcessor(libs.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

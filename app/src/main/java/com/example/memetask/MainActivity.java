@@ -97,9 +97,7 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("Да", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                records.remove(position);
                                 deleteFromDatabase(model);
-                                adapter.notifyDataSetChanged();
 
                             }
                         })
@@ -170,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Failed to delete", Toast.LENGTH_SHORT).show();
                     }
+                    loadRecordsFromDb();
                 }
             });
         }
@@ -195,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                         records.addAll(loaded);
                         adapter.notifyDataSetChanged();
                         Log.d(TAG, "weeklyEntriesJson=" + weeklyJson.toString());
-
+                        today_meme_text.setText("Meme: подбираем...");
                         startMemeLoadingEffect();
                     }
                 });
@@ -210,12 +209,14 @@ public class MainActivity extends AppCompatActivity {
                         stopMemeLoadingEffect();
                         if (selectedMeme != null) {
                             String tagInfo = pickResult.tagUsed == null ? "" : " [" + pickResult.tagUsed + "]";
+                            today_meme_text.setText("Meme: " + selectedMeme.getTitle() + tagInfo);
                             if (memeBitmap != null) {
                                 meme_img.setImageBitmap(memeBitmap);
                             } else {
                                 meme_img.setImageResource(R.drawable.ic_launcher_background);
                             }
                         } else {
+                            today_meme_text.setText("Meme: (empty)");
                             meme_img.setImageResource(R.drawable.ic_launcher_background);
                         }
                     }
