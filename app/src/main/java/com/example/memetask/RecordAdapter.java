@@ -1,6 +1,7 @@
 package com.example.memetask;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +15,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.memetask.db.MemeNoteEntity;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder> {
 
     private OnClickListener onClickListener = null;
 
-    // Set the click listener for the adapter
     public void setOnClickListener(OnClickListener listener) {
         this.onClickListener = listener;
     }
 
-    // Interface for the click listener
     interface OnClickListener {
         void updateOnClick(int position, MemeNoteEntity model);
         void deleteOnClick(int position, MemeNoteEntity model);
@@ -33,10 +39,13 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     private ArrayList<MemeNoteEntity> recordArrayList;
     private Context context;
+    private Calendar weekStart, weekEnd;
 
-    public RecordAdapter(Context context, ArrayList<MemeNoteEntity> taskArrayList) {
-        this.recordArrayList = taskArrayList;
+    public RecordAdapter(Context context, ArrayList<MemeNoteEntity> taskArrayList, Calendar weekStart, Calendar weekEnd) {
+        this.recordArrayList = taskArrayList != null ? taskArrayList : new ArrayList<>();
         this.context = context;
+        this.weekStart = weekStart;
+        this.weekEnd = weekEnd;
     }
 
 
@@ -48,7 +57,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecordAdapter.ViewHolder holder, int position) {
-        MemeNoteEntity record = recordArrayList.get(position);
+        ArrayList<MemeNoteEntity> weekRecords = sortNotes(weekSort(recordArrayList));
+        MemeNoteEntity record = weekRecords.get(position);
         holder.recordDate.setText(record.getDate());
         holder.recordImage.setImageResource(getMoodDrawableRes(record.getImageId()));
         holder.recordMood.setText(record.getNotes());
@@ -68,7 +78,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return recordArrayList.size();
+        return weekSort(recordArrayList).size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -101,6 +111,63 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         } else {
             return R.drawable.ic_launcher_background;
         }
+    }
+    private ArrayList<MemeNoteEntity> weekSort(ArrayList<MemeNoteEntity> recordArrayList) {
+        ArrayList<MemeNoteEntity> newMemeNoteArrayList = new ArrayList<>();
+        if (recordArrayList == null || recordArrayList.isEmpty()) {
+            return newMemeNoteArrayList;
+        }
+        if (weekStart == null || weekEnd == null) {
+            newMemeNoteArrayList.addAll(recordArrayList);
+            return newMemeNoteArrayList;
+        }
+
+        Calendar weekStartBoundary = (Calendar) weekStart.clone();
+        weekStartBoundary.set(Calendar.HOUR_OF_DAY, 0);
+        weekStartBoundary.set(Calendar.MINUTE, 0);
+        weekStartBoundary.set(Calendar.SECOND, 0);
+        weekStartBoundary.set(Calendar.MILLISECOND, 0);
+
+        Calendar weekEndBoundary = (Calendar) weekEnd.clone();
+        weekEndBoundary.set(Calendar.HOUR_OF_DAY, 23);
+        weekEndBoundary.set(Calendar.MINUTE, 59);
+        weekEndBoundary.set(Calendar.SECOND, 59);
+        weekEndBoundary.set(Calendar.MILLISECOND, 999);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        simpleDateFormat.setLenient(false);
+        for (MemeNoteEntity i : recordArrayList) {
+            try {
+                Date currentDate = simpleDateFormat.parse(i.getDate());
+                if (currentDate != null
+                        && !currentDate.before(weekStartBoundary.getTime())
+                        && !currentDate.after(weekEndBoundary.getTime())) {
+                    newMemeNoteArrayList.add(i);
+                }
+            } catch (ParseException e) {
+                Log.w("RecordAdapter", "Skip invalid date: " + i.getDate(), e);
+            }
+        }
+        return newMemeNoteArrayList;
+    }
+    private ArrayList<MemeNoteEntity> sortNotes(ArrayList<MemeNoteEntity> recordArrayList){
+        if (recordArrayList == null || recordArrayList.size() < 2) {
+            return recordArrayList;
+        }
+
+        DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd");
+        Collections.sort(recordArrayList, new Comparator<MemeNoteEntity>() {
+            @Override
+
+            public int compare(MemeNoteEntity o1, MemeNoteEntity o2) {
+                try {
+                    return dfm.parse(o2.getDate()).compareTo(dfm.parse(o1.getDate()));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        return recordArrayList;
     }
 
 }

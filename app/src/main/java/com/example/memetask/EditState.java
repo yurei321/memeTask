@@ -20,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.memetask.db.AppDatabase;
 import com.example.memetask.db.MemeNoteEntity;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -29,7 +30,7 @@ public class EditState extends AppCompatActivity {
     Button btn_goback, btn_send_edit;
     ImageButton img_happy, img_angry, img_sad, img_tired;
     ImageButton[] imageButtons;
-    EditText enter_notes;
+    TextInputEditText enter_notes;
     TextView date_const;
     private int selectedMoodButtonId = View.NO_ID;
     ArrayList<MemeNoteEntity> recordArrayList = new ArrayList<>();
@@ -160,7 +161,7 @@ public class EditState extends AppCompatActivity {
                 imageButton.setScaleX(1.18f);
                 imageButton.setScaleY(1.18f);
                 imageButton.setElevation(18f);
-                imageButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#b9d1a3")));
+                imageButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.select_color)));
             } else {
                 imageButton.setColorFilter(Color.argb(155, 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
                 imageButton.setAlpha(0.48f);

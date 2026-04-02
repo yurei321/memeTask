@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private final ArrayList<MemeNoteEntity> records = new ArrayList<>();
     private final ExecutorService dbExecutor = Executors.newSingleThreadExecutor();
     private final Animation memeLoadingAnimation = new AlphaAnimation(0.45f, 1.0f);
+    private Calendar monday, sunday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview);
         date_text = findViewById(R.id.date_text);
         today_meme_text = findViewById(R.id.today_meme_text);
-        adapter = new RecordAdapter(this, records);
+        updateCurrentWeekRangeText();
+        adapter = new RecordAdapter(this, records, monday, sunday);
         adapter.setOnClickListener(new RecordAdapter.OnClickListener() {
             @Override
             public void updateOnClick(int position, MemeNoteEntity model) {
@@ -121,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         memeLoadingAnimation.setDuration(650);
         memeLoadingAnimation.setRepeatCount(Animation.INFINITE);
         memeLoadingAnimation.setRepeatMode(Animation.REVERSE);
-        updateCurrentWeekRangeText();
+
 
 
 
@@ -135,11 +137,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateCurrentWeekRangeText() {
-        Calendar monday = Calendar.getInstance();
+        monday = Calendar.getInstance();
         int dayOfWeek = monday.get(Calendar.DAY_OF_WEEK);
         int daysFromMonday = (dayOfWeek + 5) % 7;
         monday.add(Calendar.DAY_OF_MONTH, -daysFromMonday);
-        Calendar sunday = (Calendar) monday.clone();
+        sunday = (Calendar) monday.clone();
         sunday.add(Calendar.DAY_OF_MONTH, 6);
 
         DateFormat deviceDateFormat = android.text.format.DateFormat.getDateFormat(this);
@@ -194,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                         records.addAll(loaded);
                         adapter.notifyDataSetChanged();
                         Log.d(TAG, "weeklyEntriesJson=" + weeklyJson.toString());
-                        today_meme_text.setText("Meme: подбираем...");
+//                        today_meme_text.setText("Meme: подбираем...");
                         startMemeLoadingEffect();
                     }
                 });
@@ -209,14 +211,14 @@ public class MainActivity extends AppCompatActivity {
                         stopMemeLoadingEffect();
                         if (selectedMeme != null) {
                             String tagInfo = pickResult.tagUsed == null ? "" : " [" + pickResult.tagUsed + "]";
-                            today_meme_text.setText("Meme: " + selectedMeme.getTitle() + tagInfo);
+//                            today_meme_text.setText("Meme: " + selectedMeme.getTitle() + tagInfo);
                             if (memeBitmap != null) {
                                 meme_img.setImageBitmap(memeBitmap);
                             } else {
                                 meme_img.setImageResource(R.drawable.ic_launcher_background);
                             }
                         } else {
-                            today_meme_text.setText("Meme: (empty)");
+//                            today_meme_text.setText("Meme: (empty)");
                             meme_img.setImageResource(R.drawable.ic_launcher_background);
                         }
                     }

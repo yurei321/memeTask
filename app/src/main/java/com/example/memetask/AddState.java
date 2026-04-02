@@ -5,6 +5,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,10 +21,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.memetask.db.AppDatabase;
 import com.example.memetask.db.MemeNoteEntity;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,7 +39,8 @@ public class AddState extends AppCompatActivity {
 
     ImageButton img_happy, img_angry, img_sad, img_tired;
     ImageButton[] imageButtons;
-    EditText enter_notes, enter_date;
+    TextInputEditText enter_notes;
+    EditText  enter_date;
     private int selectedMoodButtonId = View.NO_ID;
     ArrayList<MemeNoteEntity> recordArrayList = new ArrayList<>();
     private final ExecutorService dbExecutor = Executors.newSingleThreadExecutor();
@@ -62,6 +70,20 @@ public class AddState extends AppCompatActivity {
         for (ImageButton imageButton : imageButtons) {
             imageButton.setOnClickListener(this::onMoodSelected);
         }
+
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder
+                .datePicker()
+                .setTitleText("Choose a date")
+                .build();
+        enter_date.setOnClickListener(v -> datePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER"));
+
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.setTimeInMillis(selection);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String formattedDate  = format.format(calendar.getTime());
+            enter_date.setText(formattedDate);
+        });
 
         btn_goback_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,7 +153,8 @@ public class AddState extends AppCompatActivity {
                 imageButton.setScaleX(1.18f);
                 imageButton.setScaleY(1.18f);
                 imageButton.setElevation(18f);
-                imageButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#b9d1a3")));
+                //imageButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(R.color.select_color)));
+                imageButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.select_color)));
             } else {
                 imageButton.setColorFilter(Color.argb(155, 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
                 imageButton.setAlpha(0.48f);

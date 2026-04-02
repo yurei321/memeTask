@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:text="XX.XX.XX"
-        android:textColor="#120B6A"
+        android:textColor="@color/text_color"
         android:textSize="30dp"
         android:textStyle="bold" />
 
@@ -36,10 +36,11 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:background="#B8E99B"
+            android:background="@color/select_color"
             android:text="mood"
+            android:padding="1dp"
             android:layout_marginLeft="20dp"
-            android:textColor="#120B6A"
+            android:textColor="@color/text_color"
             android:textSize="20dp"
             android:textStyle="italic" />
 <!--        <Space-->
